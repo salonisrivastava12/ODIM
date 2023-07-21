@@ -149,7 +149,7 @@ func CreateNewSession(ctx context.Context, req *sessionproto.SessionCreateReques
 	commonResponse.ID = sess.ID
 	commonResponse.OdataID = "/redfish/v1/SessionService/Sessions/" + commonResponse.ID
 	commonResponse.CreateGenericResponse(resp.StatusMessage)
-	l.LogWithFields(ctx).Println("OdataID >>>>",commonResponse.OdataID)
+	l.LogWithFields(ctx).Info("OdataID >>>>",commonResponse.OdataID)
 	resp.Body = asresponse.Session{
 		Response: commonResponse,
 		UserName: createSession.UserName,
