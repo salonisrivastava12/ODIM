@@ -65,7 +65,7 @@ func (s *Session) CreateSession(ctx context.Context, req *sessionproto.SessionCr
 	resp.StatusCode = response.StatusCode
 	resp.StatusMessage = response.StatusMessage
 	resp.Header = response.Header
-
+	l.LogWithFields(ctx).Println("Header >>>>",resp.Header)
 	return &resp, nil
 }
 
