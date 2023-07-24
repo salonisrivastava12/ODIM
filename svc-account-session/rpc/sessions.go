@@ -60,11 +60,13 @@ func (s *Session) CreateSession(ctx context.Context, req *sessionproto.SessionCr
 		return &resp, nil
 	}
 	l.LogWithFields(ctx).Debugf("outgoing response of request to create the session: %s", string(body))
+	location:=      "/redfish/v1/SessionService/Sessions/" + sess.ID + "/",
 	resp.Body = body
 	resp.SessionId = sessionID
 	resp.StatusCode = response.StatusCode
 	resp.StatusMessage = response.StatusMessage
 	resp.Header = response.Header
+	resp.Header.Set("Location",location)
 	l.LogWithFields(ctx).Info("Header >>>>",resp.Header)
 	return &resp, nil
 }
