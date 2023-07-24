@@ -144,14 +144,13 @@ func CreateNewSession(ctx context.Context, req *sessionproto.SessionCreateReques
 	resp.Header = map[string]string{
 		"Link":         "</redfish/v1/SessionService/Sessions/" + sess.ID + "/>; rel=self",
 		"X-Auth-Token": sess.Token,
-		"Location":"</redfish/v1/SessionService/Sessions/" + sess.ID + "/>",
-		
+		"Location":      "</redfish/v1/SessionService/Sessions/" + sess.ID + "/>; rel=self",
+
 	}
 	l.LogWithFields(ctx).Info("resp.Header>>>>>>>>",resp.Header)
 	commonResponse.ID = sess.ID
 	commonResponse.OdataID = "/redfish/v1/SessionService/Sessions/" + commonResponse.ID
 	commonResponse.CreateGenericResponse(resp.StatusMessage)
-	l.LogWithFields(ctx).Info("OdataID >>>>",commonResponse.OdataID)
 	resp.Body = asresponse.Session{
 		Response: commonResponse,
 		UserName: createSession.UserName,
