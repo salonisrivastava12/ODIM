@@ -145,6 +145,7 @@ func CreateNewSession(ctx context.Context, req *sessionproto.SessionCreateReques
 		"Link":         "</redfish/v1/SessionService/Sessions/" + sess.ID + "/>; rel=self",
 		"X-Auth-Token": sess.Token,
 		"Location":"</redfish/v1/SessionService/Sessions/" + sess.ID + "/>",
+		
 	}
 	l.LogWithFields(ctx).Info("resp.Header>>>>>>>>",resp.Header)
 	commonResponse.ID = sess.ID
