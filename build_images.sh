@@ -71,7 +71,7 @@ eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.zo
 # eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.systems -t systems:6.0 ." "systems"
 # eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.task -t task:5.0 ." "task"
 # eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.telemetry -t telemetry:3.1 ." "telemetry"
-eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.Chassis -t telemetry:3.1 ." "Chassis"
+eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.chassis -t telemetry:3.1 ." "chassis"
 # eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.update -t update:5.0 ." "update"
 #eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.compositionService -t composition-service:1.0 ." "composition service"
 
