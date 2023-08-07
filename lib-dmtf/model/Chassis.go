@@ -115,7 +115,7 @@ type SysLog struct {
 	LowestSeverity string   `json:"LowestSeverity,omitempty"`
 }
 
-//Entries redfish structure
+// Entries redfish structure
 type Entries struct {
 	Oid string `json:"@odata.id"`
 }
@@ -153,7 +153,7 @@ type Status struct {
 	Ocontext     string `json:"@odata.context,omitempty"`
 	Oetag        string `json:"@odata.etag,omitempty"`
 	Otype        string `json:"@odata.type,omitempty"`
-	Description  string `json:"description,omitempty"`
+	Description  string `json:"Description,omitempty"`
 	ID           string `json:"Id,omitempty"`
 	Name         string `json:"Name,omitempty"`
 	Health       string `json:"Health,omitempty"`
@@ -164,8 +164,11 @@ type Status struct {
 
 // SaveInMemory will create the Chassis in inmemory DB, with key as UUID
 // Takes:
+//
 //	none as function parameter, but takes c of type *Chassis as a pointer receiver implicitly.
+//
 // Returns:
+//
 //	err of type error
 //
 //	On Sucess  - returns nil value
