@@ -20,17 +20,17 @@ declare -A images_list=(\
 		["aggregation"]="5.0" \
 		["api"]="5.0" \
 		["etcd"]="1.16" \
-		["events"]="5.0" \
-		["fabrics"]="4.0" \
+		# ["events"]="5.0" \
+		# ["fabrics"]="4.0" \
 		["kafka"]="2.0" \
-		["managers"]="5.0" \
+		# ["managers"]="5.0" \
 		["redis"]="4.0" \
 		["systems"]="5.0" \
-		["task"]="4.0" \
-		["telemetry"]="3.0"\
-		["update"]="4.0" \
+		# ["task"]="4.0" \
+		# ["telemetry"]="3.0"\
+		# ["update"]="4.0" \
 		["zookeeper"]="2.0" \
-		["licenses"]="2.0" \
+		# ["licenses"]="2.0" \
 		)
 
 eval_cmd_exec()

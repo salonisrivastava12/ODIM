@@ -59,9 +59,9 @@ eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.ka
 eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.zookeeper -t zookeeper:2.0 ." "zookeeper"
 
 # ODIMRA services image
-# eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.accountSession -t account-session:4.0 ." "account session"
+eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.accountSession -t account-session:4.0 ." "account session"
 eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.aggregation -t aggregation:5.0 ". "aggregation"
-# eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.api -t api:5.0 ." "api"
+eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.api -t api:5.0 ." "api"
 # eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.events -t events:5.0 ." "events"
 # eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.fabrics -t fabrics:4.0 ." "fabrics"
 # eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.telemetry -t telemetry:3.0 ." "telemetry"
