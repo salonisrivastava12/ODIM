@@ -153,7 +153,7 @@ type Status struct {
 	Ocontext     string `json:"@odata.context,omitempty"`
 	Oetag        string `json:"@odata.etag,omitempty"`
 	Otype        string `json:"@odata.type,omitempty"`
-	Description  string `json:"description,omitempty"`
+	Description  string `json:"Description,omitempty"`
 	ID           string `json:"Id,omitempty"`
 	Name         string `json:"Name,omitempty"`
 	Health       string `json:"Health,omitempty"`
