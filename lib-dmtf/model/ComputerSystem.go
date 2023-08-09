@@ -1002,7 +1002,7 @@ type PCIeDevice struct {
 	Ocontext           string         `json:"@odata.context,omitempty"`
 	Oetag              string         `json:"@odata.etag,omitempty"`
 	Otype              string         `json:"@odata.type"`
-	Description        string         `json:"description,omitempty"`
+	Description        string         `json:"Description,omitempty"`
 	ID                 string         `json:"ID"`
 	Name               string         `json:"Name"`
 	Oem                Oem            `json:"Oem,omitempty"`
@@ -1069,7 +1069,7 @@ type PCIeFunction struct {
 	Ocontext          string      `json:"@odata.context,omitempty"`
 	Oetag             string      `json:"@odata.etag,omitempty"`
 	Otype             string      `json:"@odata.type"`
-	Description       string      `json:"description,omitempty"`
+	Description       string      `json:"Description,omitempty"`
 	ID                string      `json:"ID"`
 	Name              string      `json:"Name"`
 	Oem               Oem         `json:"Oem,omitempty"`
