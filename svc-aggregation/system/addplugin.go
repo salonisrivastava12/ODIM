@@ -261,7 +261,7 @@ func (e *ExternalInterface) addPluginData(ctx context.Context, req AddResourceRe
 	// adding empty logservice entry collection
 	entriesdata := model.Collection{
 		ODataContext: "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
-		ODataID:      "/redfish/v1/Managers/" + managerUUID + "/LogServices/SL/Entries",
+		ODataID:      "/redfish/v1/Managers/" + managerUUID + "/LogServices/SL",
 		ODataType:    "#LogEntryCollection.LogEntryCollection",
 		Description:  "Security Logs view",
 		Members:      []*model.Link{},
@@ -275,7 +275,7 @@ func (e *ExternalInterface) addPluginData(ctx context.Context, req AddResourceRe
 		return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, taskInfo), "", nil
 
 	}
-	entrieskey := "/redfish/v1/Managers/" + managerUUID + "/LogServices/SL/Entries"
+	entrieskey := "/redfish/v1/Managers/" + managerUUID + "/LogServices/SL"
 	entriesdbErr := agmodel.SavePluginManagerInfo([]byte(dbentriesdata), "EntriesCollection", entrieskey)
 	if entriesdbErr != nil {
 		errMsg := entriesdbErr.Error()
