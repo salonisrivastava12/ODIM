@@ -283,13 +283,14 @@ func (e *ExternalInterface) GetManagersResource(ctx context.Context, req *manage
 			tableName = urlData[len(urlData)-2]
 		}
 		data, err := e.DB.GetResource(tableName, req.URL)
-		l.LogWithFields(ctx).info("Info>>>>>>>>>>", data)
+		l.LogWithFields(ctx).Info("<<<<<, Data ::::::::::::", data)
 		if err != nil {
 			if req.ManagerID != config.Data.RootServiceUUID {
+				l.LogWithFields(ctx).Info("Error>>>>>", err)
 				return e.getPluginManagerResoure(ctx, requestData[0], req.URL)
+
 			}
 			errorMessage := "unable to get odimra managers details: " + err.Error()
-			l.LogWithFields(ctx).Info("<<<<<<<<<<<<<               Present here >>>>>>>>>>>>>>>")
 			l.LogWithFields(ctx).Error(errorMessage)
 			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errorMessage, []interface{}{}, nil)
 		}
@@ -312,9 +313,9 @@ func (e *ExternalInterface) GetManagersResource(ctx context.Context, req *manage
 		tableName = urlData[len(urlData)-2]
 	}
 	data, err := e.DB.GetResource(tableName, req.URL)
-	l.LogWithFields(ctx).Info("Info   2>>>>>>>>>>>>>>", data)
+	l.LogWithFields(ctx).Info(" DAta 2::::::::::: ", data)
+	l.LogWithFields(ctx).Info(" Error::::::::::: ", err)
 	if err != nil {
-		l.LogWithFields(ctx).Info("<<<<<<<<<<<       Error   >>>>>>>>>>>>>>>>.")
 		if errors.DBKeyNotFound == err.ErrNo() {
 			var err error
 			if data, err = e.getResourceInfoFromDevice(ctx, req.URL, uuid, requestData[1], nil); err != nil {
@@ -501,7 +502,6 @@ func (e *ExternalInterface) getPluginManagerResoure(ctx context.Context, manager
 	var errorMessage = "unable to get the details " + reqURI + ": "
 	body, _, _, getResponse, err := mgrcommon.ContactPlugin(ctx, req, errorMessage)
 	if err != nil {
-		l.LogWithFields(ctx).Info("<<<<<<<<<<<<<<<<<<<HERE>>>>>>>>>>>>>>>>>>>>>>>>>>>", body)
 		if getResponse.StatusCode == http.StatusUnauthorized && strings.EqualFold(req.Plugin.PreferredAuthType, "XAuthToken") {
 			if body, _, _, getResponse, err = mgrcommon.RetryManagersOperation(ctx, req, errorMessage); err != nil {
 				resp.StatusCode = getResponse.StatusCode
