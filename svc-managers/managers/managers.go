@@ -497,6 +497,7 @@ func (e *ExternalInterface) getPluginManagerResoure(ctx context.Context, manager
 	var errorMessage = "unable to get the details " + reqURI + ": "
 	body, _, _, getResponse, err := mgrcommon.ContactPlugin(ctx, req, errorMessage)
 	if err != nil {
+		l.LogWithFields(ctx).Info("<<<<<<<<<<<<<<<<<<<HERE>>>>>>>>>>>>>>>>>>>>>>>>>>>", body)
 		if getResponse.StatusCode == http.StatusUnauthorized && strings.EqualFold(req.Plugin.PreferredAuthType, "XAuthToken") {
 			if body, _, _, getResponse, err = mgrcommon.RetryManagersOperation(ctx, req, errorMessage); err != nil {
 				resp.StatusCode = getResponse.StatusCode
