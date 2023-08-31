@@ -311,6 +311,7 @@ func (e *ExternalInterface) GetManagersResource(ctx context.Context, req *manage
 	}
 	data, err := e.DB.GetResource(tableName, req.URL)
 	if err != nil {
+		l.LogWithFields(ctx).Info("<<<<<<<<<<<       Error   >>>>>>>>>>>>>>>>.")
 		if errors.DBKeyNotFound == err.ErrNo() {
 			var err error
 			if data, err = e.getResourceInfoFromDevice(ctx, req.URL, uuid, requestData[1], nil); err != nil {
