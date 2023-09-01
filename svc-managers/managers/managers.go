@@ -290,7 +290,8 @@ func (e *ExternalInterface) GetManagersResource(ctx context.Context, req *manage
 				return e.getPluginManagerResoure(ctx, requestData[0], req.URL)
 
 			}
-			errorMessage := "unable to get odimra managers details: " + err.Error()
+			// errorMessage := "unable to get odimra managers details: " + err.Error()
+			errorMessage := "hello there buggie!"
 			l.LogWithFields(ctx).Error(errorMessage)
 			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errorMessage, []interface{}{}, nil)
 		}
