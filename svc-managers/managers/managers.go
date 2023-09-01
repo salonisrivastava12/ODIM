@@ -323,7 +323,9 @@ func (e *ExternalInterface) GetManagersResource(ctx context.Context, req *manage
 			l.LogWithFields(ctx).Error(" ........................ Error ::::::::::::")
 			var err error
 			if data, err = e.getResourceInfoFromDevice(ctx, req.URL, uuid, requestData[1], nil); err != nil {
-				l.LogWithFields(ctx).Error(" ........................ data 2 ::::::::::::,", data)
+				if err != nil {
+					l.LogWithFields(ctx).Error("Unable to get data:" + err.Error())
+				}
 				errorMessage := "unable to get resource details from device: " + err.Error()
 				l.LogWithFields(ctx).Error(errorMessage)
 				errArgs := []interface{}{tableName, req.ManagerID}
