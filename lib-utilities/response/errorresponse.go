@@ -25,7 +25,7 @@ const (
 	ErrorHelperMessage = "An error has occurred. See ExtendedInfo for more information."
 	//ErrorMessageOdataType holds message registry version
 	ErrorMessageOdataType               = "#Message.v1_1_2.Message"
-	propertyMissingArgCount             = 1
+	propertyMissingArgCount             = 2
 	propertyValueNotInListArgCount      = 2
 	propertyValueTypeErrorArgCount      = 2
 	resourceNotFoundArgCount            = 2
