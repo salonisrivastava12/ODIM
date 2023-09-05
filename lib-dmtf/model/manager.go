@@ -301,6 +301,9 @@ type Members struct {
 	Name                    string                   `json:"name,omitempty"`
 	Oem                     *Oem                     `json:"Oem,omitempty"`
 	Status                  []*Conditions            `json:"status,omitempty"`
+	DateTime                string                   `json:"DateTime,omitempty"`
+	DateTimeLocalOffset     string                   `json:"DateTimeLocalOffset,omitempty"`
+	ServiceEnabled          bool                     `json:"ServiceEnabled,omitempty"`
 }
 
 // CredentialBootstrapping settings for this interface

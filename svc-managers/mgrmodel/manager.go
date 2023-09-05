@@ -72,6 +72,7 @@ type Manager struct {
 	SparePartNumber         string             `json:"SparePartNumber,omitempty"`
 	Description             string             `json:"Description,omitempty"`
 	DateTimeLocalOffset     string             `json:"DateTimeLocalOffset,omitempty"`
+	ServiceEnabled          bool               `json:"ServiceEnabled,omitempty"`
 }
 
 // Status struct is to define the status of the manager
