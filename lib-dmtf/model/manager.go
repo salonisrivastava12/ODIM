@@ -144,6 +144,7 @@ type Manager struct {
 	ManagerDiagnosticData      *Link                       `json:"ManagerDiagnosticData,omitempty"`
 	ServiceIdentification      string                      `json:"ServiceIdentification,omitempty"`
 	AdditionalFirmwareVersions *AdditionalFirmwareVersions `json:"AdditionalFirmwareVersions,omitempty"`
+	ServiceEnabled             bool                        `json:"ServiceEnabled,omitempty"`
 }
 
 // AdditionalFirmwareVersions redfish structure
