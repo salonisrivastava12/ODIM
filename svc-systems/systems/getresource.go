@@ -824,6 +824,7 @@ func (p *PluginContact) GetSystems(ctx context.Context, req *systemsproto.GetSys
 	}
 	data = strings.Replace(data, `"Id":"`, `"Id":"`+uuid+`.`, -1)
 	var resource map[string]interface{}
+	l.LogWithFields(ctx).Error("data>>>>>>>>>>>", data)
 	json.Unmarshal([]byte(data), &resource)
 	resp.Body = resource
 	resp.StatusCode = http.StatusOK
