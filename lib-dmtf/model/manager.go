@@ -106,7 +106,7 @@ type Manager struct {
 	ODataType                  string                      `json:"@odata.type"`
 	Actions                    *ManagerActions             `json:"Actions,omitempty"`
 	Description                string                      `json:"Description,omitempty"`
-	ID                         string                      `json:"Id"`
+	ID                         string                      `json:"Id,omitempty"`
 	Links                      *ManagerLinks               `json:"Links,omitempty"`
 	Name                       string                      `json:"Name"`
 	Oem                        *Oem                        `json:"Oem,omitempty"`
@@ -197,7 +197,7 @@ type VirtualMedia struct {
 	Actions              VMActions           `json:"Actions,omitempty"`
 	ConnectedVia         string              `json:"ConnectedVia,omitempty"`
 	Description          string              `json:"Description,omitempty"`
-	ID                   string              `json:"Id,omitempty"`
+	ID                   string              `json:"Id"`
 	Image                string              `json:"Image"`
 	ImageName            string              `json:"ImageName,omitempty"`
 	Inserted             bool                `json:"Inserted"`

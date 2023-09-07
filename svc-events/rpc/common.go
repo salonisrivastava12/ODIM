@@ -63,6 +63,7 @@ func (e *Events) AuthorizeAndCreateTask(ctx context.Context, sessionToken string
 	resp.Header = map[string]string{
 		"Location": "/taskmon/" + taskID,
 	}
+	l.LogWithFields(ctx).Error("   taskID>>>>>>>>>>  ", taskID)
 	resp.StatusMessage = response.TaskStarted
 	generateTaskResponse(ctx, taskID, taskURI, resp)
 	return sessionUserName, taskID, nil
