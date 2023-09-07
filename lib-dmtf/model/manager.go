@@ -197,7 +197,7 @@ type VirtualMedia struct {
 	Actions              VMActions           `json:"Actions,omitempty"`
 	ConnectedVia         string              `json:"ConnectedVia,omitempty"`
 	Description          string              `json:"Description,omitempty"`
-	ID                   string              `json:"Id"`
+	ID                   string              `json:"Id,omitempty"`
 	Image                string              `json:"Image"`
 	ImageName            string              `json:"ImageName,omitempty"`
 	Inserted             bool                `json:"Inserted"`

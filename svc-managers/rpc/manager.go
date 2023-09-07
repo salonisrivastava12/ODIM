@@ -410,6 +410,7 @@ func CreateTaskAndResponse(ctx context.Context, m *Managers, sessionToken string
 
 	generateTaskResponse(taskID, taskURI, &rpcResp)
 	fillManagersProtoResponse(ctx, resp, rpcResp)
+	l.LogWithFields(ctx).Error("          taskID>>>>>>>>>>>>>>> ", taskID)
 	return taskID, nil
 }
 
