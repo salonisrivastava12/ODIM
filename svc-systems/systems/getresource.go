@@ -819,12 +819,13 @@ func (p *PluginContact) GetSystems(ctx context.Context, req *systemsproto.GetSys
 		ResourceName:    "ComputerSystem",
 	}
 	data, err := GetResourceInfoFromDeviceFunc(ctx, getDeviceInfoRequest, true)
+	l.LogWithFields(ctx).Error("data 1>>>>>>>>>>>", data)
 	if err != nil {
 		return common.GeneralError(http.StatusNotFound, response.ResourceNotFound, err.Error(), []interface{}{"ComputerSystem", req.RequestParam}, nil)
 	}
 	data = strings.Replace(data, `"Id":"`, `"Id":"`+uuid+`.`, -1)
 	var resource map[string]interface{}
-	l.LogWithFields(ctx).Error("data>>>>>>>>>>>", data)
+	l.LogWithFields(ctx).Error("data 2>>>>>>>>>>>", data)
 	json.Unmarshal([]byte(data), &resource)
 	resp.Body = resource
 	resp.StatusCode = http.StatusOK
