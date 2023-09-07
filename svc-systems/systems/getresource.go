@@ -601,7 +601,8 @@ func (p *PluginContact) GetSystemResource(ctx context.Context, req *systemsproto
 
 		l.LogWithFields(ctx).Debug("Getting the details from DB for URL ", req.URL)
 		data, err := smodel.GetResource(ctx, tableName, req.URL)
-		l.LogWithFields(ctx).Debugf("   SystemID>>>>>>> ", requestData[1])
+		l.LogWithFields(ctx).Debugf("   SystemID>>>>>>> %v", requestData[1])
+
 		if err != nil {
 			l.LogWithFields(ctx).Error("getting system details from DB: " + err.Error())
 			errorMessage := err.Error()
