@@ -25,7 +25,7 @@ type Chassis struct {
 	Oid                         string                      `json:"@odata.id"`
 	Otype                       string                      `json:"@odata.type"`
 	Oetag                       string                      `json:"@odata.etag,omitempty"`
-	ID                          string                      `json:"Id"`
+	Id                          string                      `json:"Id"`
 	Description                 string                      `json:"Description,omitempty"`
 	Name                        string                      `json:"Name"`
 	AssetTag                    interface{}                 `json:"AssetTag"` // omitempty is not added to make value as null if it's not present
