@@ -59,7 +59,6 @@ eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.re
 eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.kafka -t kafka:3.0 ." "kafka"
 eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.zookeeper -t zookeeper:3.0 ." "zookeeper"
 
-
 # ODIMRA services image
 eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.accountSession -t account-session:5.0 ." "account session"
 eval_cmd_exec "/usr/bin/docker build -f install/Docker/dockerfiles/Dockerfile.aggregation -t aggregation:6.0 ". "aggregation"
