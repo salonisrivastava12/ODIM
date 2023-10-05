@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/ODIM-Project/ODIM/lib-utilities/common"
@@ -186,7 +187,20 @@ func TestExternalInterface_RediscoverSystemInventory(t *testing.T) {
 	mockDeviceData("7a2c6100-67da-5fd6-ab82-6870d29c7279", device2)
 	mockDeviceData("24b243cf-f1e3-5318-92d9-2d6737d6b0b9", device1)
 	mockSystemData("/redfish/v1/Systems/24b243cf-f1e3-5318-92d9-2d6737d6b0b9.1")
+	t.Run("Negative case: Resource discovery error", func(t *testing.T) {
+		p := getMockExternalInterface()
 
+		// Modifying the mockPluginData function to return an error to simulate a failure during resource discovery.
+		mockPluginDataWithError(t, "GRF", fmt.Errorf("error during resource discovery"))
+
+		// Perform the test
+		err := p.RediscoverResources()
+
+		// error is as expected
+		if err == nil || !strings.Contains(err.Error(), "error during resource discovery") {
+			t.Errorf("Expected error during resource discovery, but got: %v", err)
+		}
+	})
 	type args struct {
 		deviceUUID string
 		systemURL  string

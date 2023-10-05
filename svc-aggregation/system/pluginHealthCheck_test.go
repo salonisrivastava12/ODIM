@@ -18,6 +18,8 @@
 package system
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/ODIM-Project/ODIM/lib-utilities/common"
@@ -175,6 +177,32 @@ func Test_sendFullPluginInventory(t *testing.T) {
 
 }
 
+func Test_checkPluginStatus_DecryptionError(t *testing.T) {
+	phc := &agcommon.PluginHealthCheckInterface{
+		DecryptPassword: func([]byte) ([]byte, error) {
+			return nil, fmt.Errorf("decryption error")
+		},
+	}
+	password, _ := stubDevicePassword([]byte("password"))
+	plugindata := agmodel.Plugin{
+		IP:                "duphost",
+		Port:              "9091",
+		Username:          "admin",
+		Password:          password,
+		PreferredAuthType: "BasicAuth",
+		ManagerUUID:       "mgr-addr",
+	}
+
+	ctx := mockContext()
+
+	t.Run("Negative case: Decryption error", func(t *testing.T) {
+		err := checkPluginStatus(ctx, phc, plugindata)
+		if err == nil || !strings.Contains(err.Error(), "decryption error") {
+			t.Errorf("Expected decryption error, but got: %v", err)
+		}
+	})
+}
+
 func Test_sharePluginInventory(t *testing.T) {
 	config.SetUpMockConfig(t)
 	defer func() {
@@ -225,4 +253,51 @@ func TestSendPluginStartUpData(t *testing.T) {
 	err = SendPluginStartUpData(ctx, "", plugin)
 	assert.Nil(t, err, "There should be no error")
 
+}
+func TestPushPluginStartUpData_NilData(t *testing.T) {
+	config.SetUpMockConfig(t)
+	ctx := mockContext()
+
+	t.Run("Negative case: Nil PluginStartUpData", func(t *testing.T) {
+		err := PushPluginStartUpData(ctx, agmodel.Plugin{}, nil)
+		if err == nil || !strings.Contains(err.Error(), "Invalid PluginStartUpData") {
+			t.Errorf("Expected error for nil PluginStartUpData, but got: %v", err)
+		}
+	})
+}
+
+func TestPushPluginStartUpData_InvalidPluginID(t *testing.T) {
+	config.SetUpMockConfig(t)
+	ctx := mockContext()
+	startUpData := &agmodel.PluginStartUpData{}
+
+	t.Run("Negative case: Invalid Plugin ID", func(t *testing.T) {
+		err := PushPluginStartUpData(ctx, agmodel.Plugin{ID: ""}, startUpData)
+		if err == nil || !strings.Contains(err.Error(), "Invalid Plugin ID") {
+			t.Errorf("Expected error for invalid Plugin ID, but got: %v", err)
+		}
+	})
+}
+func Test_sendFullPluginInventory_InvalidPluginID(t *testing.T) {
+	config.SetUpMockConfig(t)
+	ctx := mockContext()
+
+	t.Run("Negative case: Invalid Plugin ID", func(t *testing.T) {
+		err := sendFullPluginInventory(ctx, "", agmodel.Plugin{ID: ""})
+		if err == nil || !strings.Contains(err.Error(), "Invalid Plugin ID") {
+			t.Errorf("Expected error for invalid Plugin ID, but got: %v", err)
+		}
+	})
+}
+
+func Test_sendFullPluginInventory_NonExistentPlugin(t *testing.T) {
+	config.SetUpMockConfig(t)
+	ctx := mockContext()
+
+	t.Run("Negative case: Non-existent Plugin", func(t *testing.T) {
+		err := sendFullPluginInventory(ctx, "non-existent-plugin", agmodel.Plugin{})
+		if err == nil || !strings.Contains(err.Error(), "Plugin not found") {
+			t.Errorf("Expected error for non-existent Plugin, but got: %v", err)
+		}
+	})
 }

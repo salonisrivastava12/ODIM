@@ -172,3 +172,91 @@ func TestExternalInterface_GetConnectionMethod(t *testing.T) {
 		})
 	}
 }
+func TestGetConnectionMethodInfo_NotFound(t *testing.T) {
+	p := getMockExternalInterface()
+	ctx := mockContext()
+
+	req := &aggregatorproto.AggregatorRequest{
+		SessionToken: "validToken",
+		URL:          "/redfish/v1/AggregationService/ConnectionMethods/invalidID",
+	}
+
+	resp := response.RPC{
+		StatusCode: http.StatusNotFound,
+	}
+
+	t.Run("Invalid Connection Method ID", func(t *testing.T) {
+		got := p.GetConnectionMethodInfo(ctx, req)
+		if !reflect.DeepEqual(got.StatusCode, resp.StatusCode) {
+			t.Errorf("GetConnectionMethodInfo() = %v, want %v", got.StatusCode, resp.StatusCode)
+		}
+	})
+}
+func TestGetConnectionMethodInfo_DifferentConnectionMethods(t *testing.T) {
+	p := getMockExternalInterface()
+	ctx := mockContext()
+
+	testCases := []struct {
+		name           string
+		connectionURI  string
+		expectedStatus int
+	}{
+		{
+			name:           "Valid Connection Method 1",
+			connectionURI:  "/redfish/v1/AggregationService/ConnectionMethods/7ff3bd97-c41c-5de0-937d-85d390691b73",
+			expectedStatus: http.StatusOK,
+		},
+		{
+			name:           "Valid Connection Method 2",
+			connectionURI:  "/redfish/v1/AggregationService/ConnectionMethods/c41cbd97-937d-1b73-c41c-1b7385d39069",
+			expectedStatus: http.StatusOK,
+		},
+		{
+			name:           "Valid Connection Method 3",
+			connectionURI:  "/redfish/v1/AggregationService/ConnectionMethods/6f29f281-f5e2-4873-97b7-376be668f4f4",
+			expectedStatus: http.StatusOK,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			req := &aggregatorproto.AggregatorRequest{
+				SessionToken: "validToken",
+				URL:          tc.connectionURI,
+			}
+
+			resp := response.RPC{
+				StatusCode: tc.expectedStatus,
+			}
+
+			got := p.GetConnectionMethodInfo(ctx, req)
+			if !reflect.DeepEqual(got.StatusCode, resp.StatusCode) {
+				t.Errorf("GetConnectionMethodInfo() = %v, want %v", got.StatusCode, resp.StatusCode)
+			}
+		})
+	}
+}
+func TestGetAllConnectionMethods_EmptyCollection(t *testing.T) {
+	p := getMockExternalInterface()
+	ctx := mockContext()
+
+	resp := response.RPC{
+		StatusCode:    http.StatusOK,
+		StatusMessage: response.Success,
+	}
+	resp.Body = agresponse.List{
+		Response:     response.Response{},
+		MembersCount: 0,
+		Members:      []agresponse.ListMember{},
+	}
+
+	t.Run("Empty Connection Method Collection", func(t *testing.T) {
+		req := &aggregatorproto.AggregatorRequest{
+			SessionToken: "validToken",
+		}
+		got := p.GetAllConnectionMethods(ctx, req)
+		if !reflect.DeepEqual(got, resp) {
+			t.Errorf("GetAllConnectionMethods() = %v, want %v", got, resp)
+		}
+	})
+}

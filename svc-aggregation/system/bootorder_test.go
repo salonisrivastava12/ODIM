@@ -1,15 +1,15 @@
-//(C) Copyright [2020] Hewlett Packard Enterprise Development LP
+// (C) Copyright [2020] Hewlett Packard Enterprise Development LP
 //
-//Licensed under the Apache License, Version 2.0 (the "License"); you may
-//not use this file except in compliance with the License. You may obtain
-//a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License"); you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
 //
-//    http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-//WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-//License for the specific language governing permissions and limitations
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
 // under the License.
 package system
 
@@ -389,4 +389,129 @@ func TestPluginContact_SetDefaultBootOrderSystems(t *testing.T) {
 			}
 		})
 	}
+}
+func TestPluginContact_SetDefaultBootOrder_InvalidSessionToken(t *testing.T) {
+	p := &pluginContact
+	ctx := mockContext()
+
+	reqData, _ := json.Marshal(AggregationSetDefaultBootOrderRequest{
+		Systems: []OdataID{
+			{
+				OdataID: "/redfish/v1/Systems/7a2c6100-67da-5fd6-ab82-6870d29c7279.1",
+			},
+		},
+	})
+
+	resp := response.RPC{
+		StatusCode: http.StatusUnauthorized,
+	}
+
+	t.Run("Invalid Session Token", func(t *testing.T) {
+		req := &aggregatorproto.AggregatorRequest{
+			SessionToken: "invalidToken",
+			RequestBody:  reqData,
+		}
+		got := p.SetDefaultBootOrder(ctx, "someID", "someUser", req)
+		if !reflect.DeepEqual(got.StatusCode, resp.StatusCode) {
+			t.Errorf("SetDefaultBootOrder() = %v, want %v", got.StatusCode, resp.StatusCode)
+		}
+	})
+}
+func TestPluginContact_SetDefaultBootOrder_InvalidRequestBody(t *testing.T) {
+	p := &pluginContact
+	ctx := mockContext()
+
+	invalidReqData := []byte("invalidData")
+
+	resp := response.RPC{
+		StatusCode: http.StatusBadRequest,
+	}
+
+	t.Run("Invalid Request Body", func(t *testing.T) {
+		req := &aggregatorproto.AggregatorRequest{
+			SessionToken: "validToken",
+			RequestBody:  invalidReqData,
+		}
+		got := p.SetDefaultBootOrder(ctx, "someID", "someUser", req)
+		if !reflect.DeepEqual(got.StatusCode, resp.StatusCode) {
+			t.Errorf("SetDefaultBootOrder() = %v, want %v", got.StatusCode, resp.StatusCode)
+		}
+	})
+}
+func TestPluginContact_SetDefaultBootOrder_NoSystemsInRequest(t *testing.T) {
+	p := &pluginContact
+	ctx := mockContext()
+
+	emptyReqData, _ := json.Marshal(AggregationSetDefaultBootOrderRequest{
+		Systems: []OdataID{},
+	})
+
+	resp := response.RPC{
+		StatusCode: http.StatusBadRequest,
+	}
+
+	t.Run("No Systems in Request", func(t *testing.T) {
+		req := &aggregatorproto.AggregatorRequest{
+			SessionToken: "validToken",
+			RequestBody:  emptyReqData,
+		}
+		got := p.SetDefaultBootOrder(ctx, "someID", "someUser", req)
+		if !reflect.DeepEqual(got.StatusCode, resp.StatusCode) {
+			t.Errorf("SetDefaultBootOrder() = %v, want %v", got.StatusCode, resp.StatusCode)
+		}
+	})
+}
+func TestPluginContact_SetDefaultBootOrder_SubtaskCreationFailure(t *testing.T) {
+	p := &pluginContact
+	ctx := mockContext()
+
+	reqData, _ := json.Marshal(AggregationSetDefaultBootOrderRequest{
+		Systems: []OdataID{
+			{
+				OdataID: "/redfish/v1/Systems/7a2c6100-67da-5fd6-ab82-6870d29c7279.1",
+			},
+		},
+	})
+
+	resp := response.RPC{
+		StatusCode: http.StatusInternalServerError,
+	}
+
+	t.Run("Subtask Creation Failure", func(t *testing.T) {
+		req := &aggregatorproto.AggregatorRequest{
+			SessionToken: "validToken",
+			RequestBody:  reqData,
+		}
+		got := p.SetDefaultBootOrder(ctx, "taskWithoutChild", "someUser", req)
+		if !reflect.DeepEqual(got.StatusCode, resp.StatusCode) {
+			t.Errorf("SetDefaultBootOrder() = %v, want %v", got.StatusCode, resp.StatusCode)
+		}
+	})
+}
+func TestPluginContact_SetDefaultBootOrder_NoUUIDInDatabase(t *testing.T) {
+	p := &pluginContact
+	ctx := mockContext()
+
+	reqData, _ := json.Marshal(AggregationSetDefaultBootOrderRequest{
+		Systems: []OdataID{
+			{
+				OdataID: "/redfish/v1/Systems/s83405033-67da-5fd6-ab82-458292935.1",
+			},
+		},
+	})
+
+	resp := response.RPC{
+		StatusCode: http.StatusNotFound,
+	}
+
+	t.Run("No UUID in Database", func(t *testing.T) {
+		req := &aggregatorproto.AggregatorRequest{
+			SessionToken: "validToken",
+			RequestBody:  reqData,
+		}
+		got := p.SetDefaultBootOrder(ctx, "someID", "someUser", req)
+		if !reflect.DeepEqual(got.StatusCode, resp.StatusCode) {
+			t.Errorf("SetDefaultBootOrder() = %v, want %v", got.StatusCode, resp.StatusCode)
+		}
+	})
 }

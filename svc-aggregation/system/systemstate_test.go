@@ -176,6 +176,42 @@ func TestExternalInterface_UpdateSystemState(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "empty SystemUUID",
+			e:    &pluginContact,
+			args: args{
+				updateReq: &aggregatorproto.UpdateSystemStateRequest{
+					SystemURI:  "/redfish/v1/Systems/",
+					SystemUUID: "",
+					SystemID:   "1",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "empty SystemURI",
+			e:    &pluginContact,
+			args: args{
+				updateReq: &aggregatorproto.UpdateSystemStateRequest{
+					SystemURI:  "",
+					SystemUUID: "24b243cf-f1e3-5318-92d9-2d6737d6b0b9",
+					SystemID:   "1",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid SystemID",
+			e:    &pluginContact,
+			args: args{
+				updateReq: &aggregatorproto.UpdateSystemStateRequest{
+					SystemURI:  "/redfish/v1/Systems/",
+					SystemUUID: "24b243cf-f1e3-5318-92d9-2d6737d6b0b9",
+					SystemID:   "",
+				},
+			},
+			wantErr: true,
+		},
 	}
 	ctx := mockContext()
 	for _, tt := range tests {

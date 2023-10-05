@@ -173,3 +173,77 @@ func TestGetAggregationSource(t *testing.T) {
 		})
 	}
 }
+func TestGetAggregationSource_ErrorResponse(t *testing.T) {
+	errMsg := "error: something went wrong"
+	resp := common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
+
+	p := &ExternalInterface{
+		GetConnectionMethod: mockGetConnectionMethod,
+		GetAggregationSourceInfo: func(context.Context, string) (agmodel.AggregationSource, *errors.Error) {
+			return agmodel.AggregationSource{}, errors.PackError(errors.DBConnectionFailed, errMsg)
+		},
+	}
+
+	ctx := mockContext()
+
+	t.Run("Error Response Case", func(t *testing.T) {
+		reqURI := "/redfish/v1/AggregationService/AggregationSources/12345"
+		got := p.GetAggregationSource(ctx, reqURI)
+		if !reflect.DeepEqual(got, resp) {
+			t.Errorf("GetAggregationSource() = %v, want %v", got, resp)
+		}
+	})
+}
+
+func TestGetAggregationSource_NonExistent(t *testing.T) {
+	errMsg := "error: Aggregation Source not found"
+	resp := common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errMsg, nil, nil)
+
+	p := &ExternalInterface{
+		GetConnectionMethod: mockGetConnectionMethod,
+		GetAggregationSourceInfo: func(context.Context, string) (agmodel.AggregationSource, *errors.Error) {
+			return agmodel.AggregationSource{}, errors.PackError(errors.DBKeyNotFound, errMsg)
+		},
+	}
+
+	ctx := mockContext()
+
+	t.Run("Non-Existent Aggregation Source Case", func(t *testing.T) {
+		reqURI := "/redfish/v1/AggregationService/AggregationSources/12345"
+		got := p.GetAggregationSource(ctx, reqURI)
+		if !reflect.DeepEqual(got, resp) {
+			t.Errorf("GetAggregationSource() = %v, want %v", got, resp)
+		}
+	})
+}
+func TestGetAggregationSourceCollection_EmptyCollection(t *testing.T) {
+	resp := response.RPC{
+		StatusCode:    http.StatusOK,
+		StatusMessage: response.Success,
+	}
+	resp.CreateGenericResponse(response.Success)
+	resp.Message = ""
+	resp.ID = ""
+	resp.MessageID = ""
+	resp.Severity = ""
+	resp.Body = agresponse.List{
+		Response:     response.Response{},
+		MembersCount: 0,
+		Members:      []agresponse.ListMember{},
+	}
+
+	p := &ExternalInterface{
+		GetAllKeysFromTable: func(context.Context, string) ([]string, error) {
+			return []string{}, nil
+		},
+	}
+
+	ctx := mockContext()
+
+	t.Run("Empty Aggregation Source Collection Case", func(t *testing.T) {
+		got := p.GetAggregationSourceCollection(ctx)
+		if !reflect.DeepEqual(got, resp) {
+			t.Errorf("GetAggregationSourceCollection() = %v, want %v", got, resp)
+		}
+	})
+}
