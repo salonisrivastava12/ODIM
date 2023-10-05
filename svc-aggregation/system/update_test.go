@@ -484,6 +484,55 @@ func TestExternalInterface_UpdateAggregationSource(t *testing.T) {
 			want: resp8,
 		},
 	}
+	// Negative Case - Missing HostName in Request
+	invalidReqBody5, _ := json.Marshal(map[string]string{
+		"UserName": "admin",
+		"Password": "password",
+	})
+	errMsg = "field HostName Missing"
+	resp9 := common.GeneralError(http.StatusBadRequest, response.PropertyMissing, errMsg, []interface{}{"HostName"}, nil)
+
+	// Negative Case - Aggregation Source Not Found
+	invalidReqBody6, _ := json.Marshal(map[string]string{
+		"HostName": "100.0.0.1:50000",
+		"UserName": "admin",
+		"Password": "password",
+	})
+	resp10 := common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errMsg, []interface{}{"AggregationSource", "/redfish/v1/AggregationService/AggregationSources/123466"}, nil)
+	p := getMockExternalInterface()
+	p.ContactClient = testUpdateContactClient
+	type args struct {
+		req *aggregatorproto.AggregatorRequest
+	}
+	tests := []struct {
+		name string
+		e    *ExternalInterface
+		args args
+		want response.RPC
+	}{
+		{
+			name: "Negative Case - Missing HostName in Request",
+			e:    p,
+			args: args{
+				req: &aggregatorproto.AggregatorRequest{
+					URL:         "/redfish/v1/AggregationService/AggregationSources/123458",
+					RequestBody: invalidReqBody5,
+				},
+			},
+			want: resp9,
+		},
+		{
+			name: "Negative Case - Aggregation Source Not Found",
+			e:    p,
+			args: args{
+				req: &aggregatorproto.AggregatorRequest{
+					URL:         "/redfish/v1/AggregationService/AggregationSources/123466",
+					RequestBody: invalidReqBody6,
+				},
+			},
+			want: resp10,
+		},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.e.UpdateAggregationSource(ctx, tt.args.req); !reflect.DeepEqual(got, tt.want) {
@@ -501,4 +550,13 @@ func Test_validateManagerAddress(t *testing.T) {
 	assert.Nil(t, err, "Error should be nil")
 	err = validateManagerAddress("FQDN:PORT")
 	assert.NotNil(t, err, "Error should not be nil")
+	// Negative Case -
+	//Empty Manager Address
+	err := validateManagerAddress("")
+	assert.NotNil(t, err, "Error should not be nil")
+
+	// Invalid Manager Address Format
+	err = validateManagerAddress("FQDN:PORT")
+	assert.NotNil(t, err, "Error should not be nil")
+
 }
